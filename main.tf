@@ -6,6 +6,7 @@ module "vpc" {
   default_vpc_id=var.default_vpc_id
   route_target_cidr_block = var.route_destination_cidr_block
   default_route_table_id = var.default_route_table_id
+  default_vpc_cidr_block=var.default_vpc_cidr_block
 }
 module "app"{
   source = "./modules/app"
