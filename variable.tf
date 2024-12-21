@@ -5,4 +5,3 @@ variable "default_vpc_id"{}
 variable "route_destination_cidr_block"{}
 variable "default_route_table_id"{}
 variable "instance_type" {}
-variable "default_cidr_block" {}
