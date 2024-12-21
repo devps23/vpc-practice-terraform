@@ -34,7 +34,7 @@ resource "aws_route" "source_route" {
 # Edit the routes on current vpc min route table id to default vpc id
 resource "aws_route" "dest_route" {
   route_table_id            = aws_vpc.vpc.main_route_table_id
-  destination_cidr_block    = var.default_vpc_id
+  destination_cidr_block    = var.default_vpc_cidr_block
   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peer.id
 }
 
