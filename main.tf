@@ -13,5 +13,5 @@ module "app"{
   instance_type = var.instance_type
   vpc_id = module.vpc.vpc_id
   subnet_id = module.vpc.subnets_id
-  default_cidr_block = var.default_cidr_block
+
 }
