@@ -1,5 +1,5 @@
 # create an instance
-resource "aws_instance" "component" {
+resource "aws_instance" "instance" {
   ami = data.aws_ami.ami.image_id
   instance_type = var.instance_type
   vpc_id =  var.vpc_id
