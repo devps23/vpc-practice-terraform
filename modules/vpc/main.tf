@@ -73,7 +73,7 @@ resource "aws_route_table" "frontend_route_table" {
   vpc_id = aws_vpc.vpc.id
   route {
     cidr_block = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat.id
+    nat_gateway_id = aws_nat_gateway.nat[count.index].id
   }
   tags = {
     Name = "${var.env}-route-table-${count.index+1}"
@@ -82,13 +82,13 @@ resource "aws_route_table" "frontend_route_table" {
 # associate route table id to subnet id
 resource "aws_route_table_association" "public-route-association" {
   count = length(var.public_subnets)
-  subnet_id      = aws_subnet.public_subnets.id
-  route_table_id = aws_route_table.public_route_table.id
+  subnet_id      = aws_subnet.public_subnets[count.index].id
+  route_table_id = aws_route_table.public_route_table[count.index].id
 }
 resource "aws_route_table_association" "frontend-route-association" {
   count = length(var.frontend_subnets)
-  subnet_id      = aws_subnet.public_subnets.id
-  route_table_id = aws_route_table.public_route_table.id
+  subnet_id      = aws_subnet.public_subnets[count.index].id
+  route_table_id = aws_route_table.public_route_table[count.index].id
 }
 # edit the route
 resource "aws_route" "frontend_route" {
