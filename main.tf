@@ -6,6 +6,10 @@ module "vpc" {
   default_vpc_id = var.default_vpc_id
   default_vpc_cidr_block = var.default_vpc_cidr_block
   default_route_table_id = var.default_route_table_id
+  backend_subnets = var.backend_subnets
+  db_subnets = var.db_subnets
+  frontend_subnets = var.frontend_subnets
+  public_subnets = var.public_subnets
 }
 module "app"{
   source = "./modules/app"

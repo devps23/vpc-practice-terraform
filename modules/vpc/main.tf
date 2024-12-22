@@ -5,15 +5,26 @@ resource "aws_vpc" "vpc" {
     Name = "${var.env}-vpc"
   }
 }
-# create subnets
-resource "aws_subnet" "subnet" {
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = var.subnet_cidr_block
-
+# create public subnets
+resource "aws_subnet" "public_subnets" {
+  count         =  length(var.public_subnets)
+  vpc_id        =  aws_vpc.vpc.id
+  cidr_block    =  var.subnet_cidr_block[count.index]
   tags = {
-    Name = "${var.env}-subnet"
+    Name = "${var.env}-public-subnet-${count.index+1}"
   }
 }
+# create private subnets
+resource "aws_subnet" "frontend_subnets" {
+  count        = length(var.frontend_subnets)
+  vpc_id       = aws_vpc.vpc.id
+  cidr_block   = var.subnet_cidr_block[count.index]
+
+  tags = {
+    Name = "${var.env}-frontend-subnet-${count.index+1}"
+  }
+}
+
 # create peer connection between two vpc ids
 resource "aws_vpc_peering_connection" "peer" {
   peer_vpc_id   = var.default_vpc_id
@@ -23,43 +34,7 @@ resource "aws_vpc_peering_connection" "peer" {
     Name = "${var.env}-peer"
   }
 }
-# Edit routes on main vpc route
-# resource "aws_route" "main_edit_route" {
-#   route_table_id            = aws_vpc.vpc.main_route_table_id
-#   destination_cidr_block    = var.default_vpc_cidr_block
-#   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
-# }
-# Edit routes on default vpc route
-resource "aws_route" "default_edit_route" {
-  route_table_id            = var.default_route_table_id
-  destination_cidr_block    = var.vpc_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
-}
-# create a route table
-resource "aws_route_table" "route_table" {
-  vpc_id = aws_vpc.vpc.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
-  }
-  tags = {
-    Name = "${var.env}-route-table"
-  }
-}
-# associate route table id to subnet id
-resource "aws_route_table_association" "subnet-rout-association" {
-  subnet_id      = aws_subnet.subnet.id
-  route_table_id = aws_route_table.route_table.id
-
-}
-resource "aws_route" "custom_edit_route" {
-  route_table_id            = aws_route_table.route_table.id
-  destination_cidr_block    = var.default_vpc_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
-
-}
-# add routes to the route table
-# add internet gateway
+# create internet gateway
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
 
@@ -67,3 +42,64 @@ resource "aws_internet_gateway" "gw" {
     Name = "${var.env}-igw"
   }
 }
+# create a route table
+resource "aws_route_table" "public_route_table" {
+  count = length(var.public_subnets)
+  vpc_id = aws_vpc.vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw[count.index].id
+  }
+  tags = {
+    Name = "${var.env}-public route-table-${count.index+1}"
+  }
+}
+# create nat gateway
+resource "aws_nat_gateway" "nat" {
+  count = length(var.public_subnets)
+  allocation_id = aws_eip.eip[count.index].id
+  subnet_id     = aws_subnet.public_subnets[count.index].id
+  tags = {
+    Name = "${var.env}-nat-${count.index+1}"
+  }
+}
+  resource "aws_eip" "eip" {
+    count = length(var.public_subnets)
+    domain   = "vpc"
+}
+# create private route table
+resource "aws_route_table" "frontend_route_table" {
+  count = length(var.frontend_subnets)
+  vpc_id = aws_vpc.vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id
+  }
+  tags = {
+    Name = "${var.env}-route-table-${count.index+1}"
+  }
+}
+# associate route table id to subnet id
+resource "aws_route_table_association" "public-route-association" {
+  count = length(var.public_subnets)
+  subnet_id      = aws_subnet.public_subnets.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+resource "aws_route_table_association" "frontend-route-association" {
+  count = length(var.frontend_subnets)
+  subnet_id      = aws_subnet.public_subnets.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+# edit the route
+resource "aws_route" "frontend_route" {
+  count = length(var.frontend_subnets)
+  route_table_id = aws_route_table_association.frontend-route-association[count.index].id
+  destination_cidr_block = var.default_vpc_cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+}
+# # default edit route
+# resource "aws_route" "default_route" {
+#   route_table_id = var.default_route_table_id
+#   destination_cidr_block = aws_subnet.frontend_subnets
+# }
+
