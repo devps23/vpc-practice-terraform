@@ -36,9 +36,15 @@ resource "aws_route" "default_edit_route" {
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
 }
 # create a route table
-resource "aws_route_table" "example" {
+resource "aws_route_table" "route_table" {
   vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "${var.env}-route-table"
   }
+}
+# associate route table id to subnet id
+resource "aws_route_table_association" "a" {
+  subnet_id      = aws_subnet.subnet.id
+  route_table_id = aws_route_table.route_table.id
+
 }
