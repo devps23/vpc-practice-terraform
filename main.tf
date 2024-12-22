@@ -11,7 +11,6 @@ module "app"{
   source = "./modules/app"
   env = var.env
   instance_type = var.instance_type
-
-  subnet_id = ""
-  vpc_id    = ""
+  subnet_id = module.vpc.subnet
+  vpc_id    = module.vpc.vpc_id
 }
