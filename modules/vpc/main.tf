@@ -101,7 +101,7 @@ resource "aws_route" "frontend_route" {
 resource "aws_route" "default_route" {
   count = length(var.frontend_subnets)
   route_table_id = var.default_route_table_id
-  destination_cidr_block = aws_subnet.frontend_subnets[count.index].id
+  destination_cidr_block = var.frontend_subnets[count.index]
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
 }
 
