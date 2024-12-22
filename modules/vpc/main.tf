@@ -87,8 +87,8 @@ resource "aws_route_table_association" "public-route-association" {
 }
 resource "aws_route_table_association" "frontend-route-association" {
   count = length(var.frontend_subnets)
-  subnet_id      = aws_subnet.public_subnets[count.index].id
-  route_table_id = aws_route_table.public_route_table[count.index].id
+  subnet_id      = aws_subnet.frontend_subnets[count.index].id
+  route_table_id = aws_route_table.frontend_route_table[count.index].id
 }
 # edit the route
 resource "aws_route" "frontend_route" {
