@@ -2,7 +2,7 @@
 resource "aws_instance" "instance" {
   ami = data.aws_ami.ami.image_id
   instance_type = var.instance_type
-  subnet_id = var.subnet_id
+  vpc_security_group_ids = [aws_security_group.security_group.id]
   instance_market_options {
     market_type = "spot"
     spot_options {
@@ -12,5 +12,27 @@ resource "aws_instance" "instance" {
   }
   tags = {
     Name = "${var.env}-demo"
+  }
+}
+# create a security group
+resource "aws_security_group" "security_group" {
+  name        = "${var.env}-sg"
+  vpc_id      = var.vpc_id
+  ingress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+
+  }
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+
+  }
+  tags = {
+    Name = "${var.env}-sg"
   }
 }
