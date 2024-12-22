@@ -97,9 +97,11 @@ resource "aws_route" "frontend_route" {
   destination_cidr_block = var.default_vpc_cidr_block
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
 }
-# # default edit route
-# resource "aws_route" "default_route" {
-#   route_table_id = var.default_route_table_id
-#   destination_cidr_block = aws_subnet.frontend_subnets
-# }
+# default edit route
+resource "aws_route" "default_route" {
+  count = length(var.frontend_subnets)
+  route_table_id = var.default_route_table_id
+  destination_cidr_block = aws_subnet.frontend_subnets[count.index].id
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+}
 
