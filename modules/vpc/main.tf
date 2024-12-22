@@ -23,9 +23,15 @@ resource "aws_vpc_peering_connection" "peer" {
     Name = "${var.env}-peer"
   }
 }
-# Edit routes on both sides of VPC
+# Edit routes on main vpc route
 resource "aws_route" "main_edit_route" {
   route_table_id            = aws_vpc.vpc.main_route_table_id
   destination_cidr_block    = var.default_vpc_cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+}
+# Edit routes on default vpc route
+resource "aws_route" "main_edit_route" {
+  route_table_id            = var.default_route_table_id
+  destination_cidr_block    = var.vpc_cidr_block
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
 }
