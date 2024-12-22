@@ -35,3 +35,10 @@ resource "aws_route" "default_edit_route" {
   destination_cidr_block    = var.vpc_cidr_block
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
 }
+# create a route table
+resource "aws_route_table" "example" {
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name = "${var.env}-route-table"
+  }
+}
