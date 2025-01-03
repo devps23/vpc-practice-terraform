@@ -30,4 +30,5 @@ module "frontend"{
   lb_subnets = module.vpc.public_subnets
   lb_needed = true
   app_port = 80
+  vault_token=var.vault_token
 }

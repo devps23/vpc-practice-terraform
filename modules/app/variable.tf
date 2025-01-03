@@ -8,3 +8,4 @@ variable "lb_type" {}
 variable "lb_subnets" {}
 variable "lb_needed"{}
 variable "app_port"{}
+variable "vault_token" {}
