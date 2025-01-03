@@ -27,5 +27,5 @@ module "frontend"{
   component = "frontend"
   lb_type = "public"
   zone_id = var.zone_id
-  lb_subnets = var.public_subnets
+  lb_subnets = module.vpc.public_subnets
 }
