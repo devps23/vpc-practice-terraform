@@ -59,12 +59,21 @@ resource "aws_security_group" "security_group" {
 #   ttl       = 5
 #   records = [aws_instance.instance.public_ip]
 # }
-resource "aws_route53_record" "record" {
+resource "aws_route53_record" "server_record" {
+  count = var.lb_needed ? 0 : 1
   name      = "${var.env}-${var.component}-dns"
   type      = "A"
   zone_id   = var.zone_id
   ttl       = 5
   records = [aws_instance.instance.private_ip]
+}
+resource "aws_route53_record" "lb_record" {
+  count = var.lb_needed ? 1 : 0
+  name      = "${var.env}-${var.component}-dns"
+  type      = "CNAME"
+  zone_id   = var.zone_id
+  ttl       = 5
+  records = [aws_lb.lb[0].dns_name]
 }
 # create load balancer
 resource "aws_lb" "lb" {
