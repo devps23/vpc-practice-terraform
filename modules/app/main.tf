@@ -42,7 +42,7 @@ resource "null_resource" "null_instance" {
     type     = "ssh"
     user     = "ec2-user"
     password = "DevOps321"
-    host     = 3.86.233.253
+    host     = "3.86.233.253"
   }
   provisioner "remote-exec" {
     inline = [
