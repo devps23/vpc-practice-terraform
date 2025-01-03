@@ -94,6 +94,15 @@ resource "aws_lb_target_group" "tg" {
   port              = var.app_port
   protocol          = "HTTP"
   vpc_id            = var.vpc_id
+  health_check {
+    protocol = "HTTP"
+    port = var.app_port
+    path = "/health"
+    healthy_threshold = 2
+    unhealthy_threshold = 2
+    interval = 5
+    timeout = 2
+  }
 }
 # create a target group attachment
 resource "aws_lb_target_group_attachment" "tg_attach" {
