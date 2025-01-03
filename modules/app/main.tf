@@ -74,7 +74,6 @@ resource "aws_lb" "lb" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.security_group.id]
   subnets            = var.lb_subnets
-  enable_deletion_protection = true
   tags = {
     Environment = "${var.env}-${var.component}-lb"
   }
