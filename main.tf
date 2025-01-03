@@ -22,10 +22,12 @@ module "frontend"{
   source = "./modules/app"
   env    = var.env
   instance_type = var.instance_type
-#   subnet_id = module.vpc.frontend_subnet
+  subnet_id = module.vpc.frontend_subnets
   vpc_id = module.vpc.vpc_id
   component = "frontend"
   lb_type = "public"
   zone_id = var.zone_id
   lb_subnets = module.vpc.public_subnets
+  lb_needed = true
+  app_port = 80
 }
