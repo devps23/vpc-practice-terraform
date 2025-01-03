@@ -66,5 +66,17 @@ resource "aws_route53_record" "record" {
   ttl       = 5
   records = [aws_instance.instance.private_ip]
 }
+# create load balancer
+resource "aws_lb" "test" {
+  name               = "${var.env}-${var.component}-lb"
+  internal           = var.lb_type == "public" ? 0 : 1
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.security_group.id]
+  subnets            = var.lb_subnets
+  enable_deletion_protection = true
+  tags = {
+    Environment = "${var.env}-${var.component}-lb"
+  }
+}
 
 
