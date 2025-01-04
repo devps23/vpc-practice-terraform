@@ -12,3 +12,4 @@ variable "public_subnets"{}
 variable "zone_id"{}
 variable "vault_token"{}
 variable "bastion_nodes" {}
+variable "availability_zones" {}

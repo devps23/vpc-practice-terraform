@@ -36,6 +36,7 @@ module "frontend"{
   server_app_port = var.public_subnets
   bastion_nodes = var.bastion_nodes
   lb_app_port = ["0.0.0.0/0"]
+  availability_zones = var.availability_zones
 }
 # module "backend"{
 #   depends_on = [module.mysql]
