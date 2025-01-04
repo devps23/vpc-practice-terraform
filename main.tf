@@ -10,7 +10,7 @@ module "vpc" {
   db_subnets = var.db_subnets
   frontend_subnets = var.frontend_subnets
   public_subnets = var.public_subnets
-  availability_zones = var.availability_zones
+ availability_zones = var.availability_zones
 }
 # module "app"{
 #   source = "./modules/app"
