@@ -7,6 +7,6 @@ output "frontend_subnets"{
 output "public_subnets"{
   value = aws_subnet.public_subnets.*.id
 }
-output "backend_subnets"{
-  value = aws_subnet
-}
+# output "backend_subnets"{
+#   value = aws_subnet
+# }
