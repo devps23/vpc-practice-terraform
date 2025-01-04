@@ -132,7 +132,7 @@ resource "aws_security_group" "lb_security_group" {
     from_port        = var.app_port
     to_port          = var.app_port
     protocol         = "TCP"
-    cidr_blocks      = [var.lb_app_port]
+    cidr_blocks      = var.lb_app_port
   }
   egress {
     from_port        = 0
