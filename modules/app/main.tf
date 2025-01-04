@@ -49,7 +49,7 @@ resource "null_resource" "null_instance" {
     type     = "ssh"
     user     = jsondecode(data.vault_generic_secret.my_secret.data_json).username
     password = jsondecode(data.vault_generic_secret.my_secret.data_json).password
-    host     = "10.10.12.223"
+    host     = aws_instance.instance.private_ip
   }
   provisioner "remote-exec" {
     inline = [
@@ -61,7 +61,7 @@ resource "null_resource" "null_instance" {
   }
 }
 resource "aws_route53_record" "server_record" {
-  count = var.lb_needed ? 0 : 1 || var.component == "frontend" ? 1:0
+  count = var.lb_needed ? 0 : 1
   name      = "${var.env}-${var.component}-dns"
   type      = "A"
   zone_id   = var.zone_id
