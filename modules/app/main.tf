@@ -17,7 +17,6 @@ resource "aws_instance" "instance" {
 }
 # create a security group
 resource "aws_security_group" "security_group" {
-  count                 = var.lb_needed ? 0 : 1
   name        = "${var.env}-sg"
   vpc_id      = var.vpc_id
   ingress {
