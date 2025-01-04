@@ -55,7 +55,7 @@ resource "null_resource" "null_instance" {
     inline = [
       "sudo dnf install ansible",
       "sudo pip3.11 install ansible hvac",
-      "ansible-pull -i localhost. -U https://github.com/devps23/expesne-practice-ansible get_secrets_vault.yml -e env=${var.env} -e component_name=${var.component} -e vault_token=${var.vault_token}",
+      "ansible-pull -i localhost, -U https://github.com/devps23/expesne-practice-ansible get_secrets_vault.yml -e env=${var.env} -e component_name=${var.component} -e vault_token=${var.vault_token}",
       "ansible-pull -i localhost, -U https://github.com/devps23/expense-practice-ansible expense.yml -e env=${var.env} -e component_name=${var.component} -e @secrets.json -e @app.json"
     ]
   }
