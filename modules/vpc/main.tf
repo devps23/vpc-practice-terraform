@@ -10,7 +10,7 @@ resource "aws_subnet" "public_subnets" {
   count         =  length(var.public_subnets)
   vpc_id        =  aws_vpc.vpc.id
   cidr_block    =  var.public_subnets[count.index]
-availability_zone = var.availability_zones
+availability_zone = var.availability_zones[count.index]
   tags = {
     Name = "${var.env}-public-subnet-${count.index+1}"
   }
@@ -20,7 +20,7 @@ resource "aws_subnet" "frontend_subnets" {
   count        = length(var.frontend_subnets)
   vpc_id       = aws_vpc.vpc.id
   cidr_block   = var.frontend_subnets[count.index]
- availability_zone = var.availability_zones
+ availability_zone = var.availability_zones[count.index]
 
   tags = {
     Name = "${var.env}-frontend-subnet-${count.index+1}"
