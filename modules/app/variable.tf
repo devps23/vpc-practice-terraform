@@ -18,4 +18,3 @@ variable "bastion_nodes" {}
 variable "lb_app_port" {
   default = null
 }
-variable "availability_zones" {}
