@@ -10,6 +10,7 @@ module "vpc" {
   db_subnets = var.db_subnets
   frontend_subnets = var.frontend_subnets
   public_subnets = var.public_subnets
+  availability_zones = var.availability_zones
 }
 # module "app"{
 #   source = "./modules/app"
@@ -36,7 +37,7 @@ module "frontend"{
   server_app_port = var.public_subnets
   bastion_nodes = var.bastion_nodes
   lb_app_port = ["0.0.0.0/0"]
-  availability_zones = var.availability_zones
+
 }
 # module "backend"{
 #   depends_on = [module.mysql]
