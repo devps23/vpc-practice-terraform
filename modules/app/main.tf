@@ -20,11 +20,17 @@ resource "aws_security_group" "security_group" {
   name        = "${var.env}-sg"
   vpc_id      = var.vpc_id
   ingress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port        = var.app_port
+    to_port          = var.app_port
+    protocol         = "TCP"
+    cidr_blocks      = [var.server_app_port]
 
+  }
+  ingress {
+    from_port        = 22
+    to_port          = 22
+    protocol         = "TCP"
+    cidr_blocks      = [var.bastion_nodes]
   }
   egress {
     from_port        = 0
@@ -37,6 +43,7 @@ resource "aws_security_group" "security_group" {
     Name = "${var.env}-sg"
   }
 }
+# create a provisioner
 resource "null_resource" "null_instance" {
   connection {
     type     = "ssh"
@@ -115,6 +122,26 @@ resource "aws_lb_listener" "lb_listener" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.tg[0].arn
+  }
+}
+# create a security loadbalancer
+resource "aws_security_group" "security_group" {
+  name        = "${var.env}-sg"
+  vpc_id      = var.vpc_id
+  ingress {
+    from_port        = var.app_port
+    to_port          = var.app_port
+    protocol         = "TCP"
+    cidr_blocks      = [var.lb_app_port]
+  }
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "${var.env}-sg"
   }
 }
 
