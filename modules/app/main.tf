@@ -17,20 +17,21 @@ resource "aws_instance" "instance" {
 }
 # create a security group
 resource "aws_security_group" "security_group" {
-  name        = "${var.env}-sg"
-  vpc_id      = var.vpc_id
+  //count                 = var.lb_needed ? 0 : 1
+  name                  = "${var.env}-sg"
+  vpc_id                = var.vpc_id
+#   ingress {
+#     from_port           = var.app_port
+#     to_port             = var.app_port
+#     protocol            = "TCP"
+#     cidr_blocks         = var.server_app_port
+#
+#   }
   ingress {
-    from_port        = var.app_port
-    to_port          = var.app_port
-    protocol         = "TCP"
-    cidr_blocks      = var.server_app_port
-
-  }
-  ingress {
-    from_port        = 22
-    to_port          = 22
-    protocol         = "TCP"
-    cidr_blocks      = var.bastion_nodes
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
   }
   egress {
     from_port        = 0
@@ -125,25 +126,25 @@ resource "aws_lb_listener" "lb_listener" {
   }
 }
 # create a security loadbalancer
-resource "aws_security_group" "lb_security_group" {
-  count            = var.lb_needed ? 1:0
-  name             = "${var.env}-lsg"
-  vpc_id           = var.vpc_id
-  ingress {
-    from_port        = var.app_port
-    to_port          = var.app_port
-    protocol         = "TCP"
-    cidr_blocks      = var.lb_app_port
-  }
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name = "${var.env}-sg"
-  }
-}
+# resource "aws_security_group" "lb_security_group" {
+#   count              = var.lb_needed ? 1:0
+#   name               = "${var.env}-lsg"
+#   vpc_id             = var.vpc_id
+#   ingress {
+#     from_port        = var.app_port
+#     to_port          = var.app_port
+#     protocol         = "TCP"
+#     cidr_blocks      = var.lb_app_port
+#   }
+#   egress {
+#     from_port        = 0
+#     to_port          = 0
+#     protocol         = "-1"
+#     cidr_blocks      = ["0.0.0.0/0"]
+#   }
+#   tags = {
+#     Name = "${var.env}-lsg"
+#   }
+# }
 
 
