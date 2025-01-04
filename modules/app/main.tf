@@ -49,7 +49,7 @@ resource "null_resource" "null_instance" {
     type     = "ssh"
     user     = "ec2-user"
     password = "DevOps321"
-    host     = aws_instance.instance.public_ip
+    host     = aws_instance.instance.private_ip
   }
   provisioner "remote-exec" {
     inline = [
