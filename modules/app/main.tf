@@ -126,7 +126,7 @@ resource "aws_lb_listener" "lb_listener" {
 }
 # create a security loadbalancer
 resource "aws_security_group" "security_group" {
-  name        = "${var.env}-sg"
+  name        = "${var.env}-lsg"
   vpc_id      = var.vpc_id
   ingress {
     from_port        = var.app_port
