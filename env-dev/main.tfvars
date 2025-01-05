@@ -14,3 +14,4 @@ vault_token="hvs.fMGVYmkvteLqprw3itd1iXUe"
 bastion_nodes=["172.31.84.158/32"]
 availability_zones=["us-east-1a", "us-east-1b"]
 
+

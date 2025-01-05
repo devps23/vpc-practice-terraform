@@ -135,9 +135,50 @@ resource "aws_lb_target_group_attachment" "tg_attach" {
   port             = var.app_port
 }
 # create a listeners
-# create listeners and forward target groups to load balancer
-resource "aws_lb_listener" "lb_listener" {
-  count             = var.lb_needed ? 1 : 0
+# create listeners and forward target groups to load balancer,this protocol is HTTP for both frontend and backend component
+# resource "aws_lb_listener" "lb_listener" {
+#   count             = var.lb_needed ? 1 : 0
+#   load_balancer_arn = aws_lb.lb[0].arn
+#   port              = var.app_port
+#   protocol          = "HTTP"
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.tg[0].arn
+#   }
+# }
+
+# create frontend HTTP Listener and redirect traffic to HTTPS with port 443
+resource "aws_lb_listener" "frontend_HTTP" {
+  count             = var.lb_needed && var.lb_type == "public" ? 1:0
+  load_balancer_arn = aws_lb.lb[0].arn
+  port              = var.app_port
+  protocol          = "HTTP"
+  default_action {
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+# once redirect control will come to the below code and forward  target group to loadbalancer
+resource "aws_lb_listener" "frontend_HTTPS_listener" {
+  count             = var.lb_needed && var.lb_type == "public" ? 1:0
+  load_balancer_arn = aws_lb.lb[0].arn
+  port              = "443"
+  protocol          = "TLS"
+  ssl_policy        = var.ssl_policy
+  certificate_arn   = var.certificate_arn
+  alpn_policy       = "HTTP2Preferred"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.tg[0].arn
+  }
+}
+# # create backend HTTP Listener and forward traffic to LoadBalancer with port 8080
+resource "aws_lb_listener" "backend_HTTP_listener" {
+  count             = var.lb_needed && var.lb_type != "public" ? 1:0
   load_balancer_arn = aws_lb.lb[0].arn
   port              = var.app_port
   protocol          = "HTTP"
@@ -151,11 +192,20 @@ resource "aws_security_group" "lb_security_group" {
   count              = var.lb_needed ? 1:0
   name               = "${var.env}-lsg"
   vpc_id             = var.vpc_id
-  ingress {
-    from_port        = var.app_port
-    to_port          = var.app_port
-    protocol         = "TCP"
-    cidr_blocks      = var.lb_app_port
+#   ingress {
+#     from_port        = var.app_port
+#     to_port          = var.app_port
+#     protocol         = "TCP"
+#     cidr_blocks      = var.lb_cidr_block
+#   }
+  dynamic "ingress" {
+    for_each           = var.lb_app_port
+    content {
+      from_port        = ingress.value
+      to_port          = ingress.value
+      protocol         = "TCP"
+      cidr_blocks      = var.lb_cidr_block
+    }
   }
   egress {
     from_port        = 0

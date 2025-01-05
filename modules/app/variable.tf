@@ -15,6 +15,15 @@ variable "server_app_port" {}
 variable "app_port"{}
 variable "vault_token" {}
 variable "bastion_nodes" {}
-variable "lb_app_port" {
+variable "lb_cidr_block" {
   default = null
+}
+variable "certificate_arn" {
+  default = null
+}
+variable "ssl_policy" {
+  default = null
+}
+variable "lb_app_port" {
+  default = {}
 }

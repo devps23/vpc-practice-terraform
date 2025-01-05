@@ -36,8 +36,10 @@ module "frontend"{
   vault_token=var.vault_token
   server_app_port = var.public_subnets
   bastion_nodes = var.bastion_nodes
-  lb_app_port = ["0.0.0.0/0"]
-
+  lb_cidr_block = ["0.0.0.0/0"]
+  certificate_arn = "arn:aws:acm:us-east-1:041445559784:certificate/72a58e17-a0dd-4c57-be2e-9c2caf20a5ec"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-1-2021-06"
+  lb_app_port = {HTTP:80,HTTPS:443}
 }
 # module "backend"{
 #   depends_on = [module.mysql]
@@ -55,7 +57,8 @@ module "frontend"{
 #   vault_token=var.vault_token
 #   server_app_port = concat(var.frontend_subnets,var.backend_subnets)
 #   bastion_nodes = var.bastion_nodes
-#   lb_app_port = var.frontend_subnets
+#   lb_cidr_block = var.frontend_subnets
+#   lb_app_port = {HTTP:8080}
 # }
 # module "mysql"{
 #   source = "./modules/app"
