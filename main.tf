@@ -46,7 +46,7 @@ module "backend"{
   source = "./modules/app"
   env    = var.env
   instance_type = var.instance_type
-  subnet_id = ""
+  subnet_id = module.vpc.backend_subnets
   vpc_id = module.vpc.vpc_id
   component = "backend"
   lb_type = "private"
@@ -58,7 +58,7 @@ module "backend"{
   server_app_port = concat(var.frontend_subnets,var.backend_subnets)
   bastion_nodes = var.bastion_nodes
   lb_cidr_block = var.frontend_subnets
-lb_app_port = {HTTP:8080}
+  lb_app_port = {HTTP:8080}
 }
 # module "mysql"{
 #   source = "./modules/app"
