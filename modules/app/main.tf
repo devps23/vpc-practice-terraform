@@ -151,12 +151,12 @@ resource "aws_lb_target_group_attachment" "tg_attach" {
 resource "aws_lb_listener" "frontend_HTTP" {
   count             = var.lb_needed && var.lb_type == "public" ? 1:0
   load_balancer_arn = aws_lb.lb[0].arn
-  port              = var.app_port
+  port              = 80
   protocol          = "HTTP"
   default_action {
     type = "redirect"
     redirect {
-      port        = var.lb_app_port
+      port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
     }
@@ -166,8 +166,8 @@ resource "aws_lb_listener" "frontend_HTTP" {
 resource "aws_lb_listener" "frontend_HTTPS_listener" {
   count             = var.lb_needed && var.lb_type == "public" ? 1:0
   load_balancer_arn = aws_lb.lb[0].arn
-  port              = var.lb_app_port
-  protocol          = "TLS"
+  port              = "443"
+  protocol          = "HTTPS"
   ssl_policy        = var.ssl_policy
   certificate_arn   = var.certificate_arn
   alpn_policy       = "HTTP2Preferred"
