@@ -168,7 +168,7 @@ resource "aws_lb_listener" "frontend_HTTPS_listener" {
   load_balancer_arn = aws_lb.lb[0].arn
   port              = "443"
   protocol          = "HTTPS"
-  ssl_policy        = var.ssl_policy
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-1-2021-06"
   certificate_arn   = var.certificate_arn
   alpn_policy       = "HTTP2Preferred"
   default_action {
@@ -180,7 +180,7 @@ resource "aws_lb_listener" "frontend_HTTPS_listener" {
 resource "aws_lb_listener" "backend_HTTP_listener" {
   count             = var.lb_needed && var.lb_type != "public" ? 1:0
   load_balancer_arn = aws_lb.lb[0].arn
-  port              = var.lb_app_port
+  port              = "443"
   protocol          = "HTTP"
   default_action {
     type             = "forward"
