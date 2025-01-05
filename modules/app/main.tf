@@ -156,7 +156,7 @@ resource "aws_lb_listener" "frontend_HTTP" {
   default_action {
     type = "redirect"
     redirect {
-      port        = "443"
+      port        = var.lb_app_port
       protocol    = "HTTPS"
       status_code = "HTTP_301"
     }
@@ -166,7 +166,7 @@ resource "aws_lb_listener" "frontend_HTTP" {
 resource "aws_lb_listener" "frontend_HTTPS_listener" {
   count             = var.lb_needed && var.lb_type == "public" ? 1:0
   load_balancer_arn = aws_lb.lb[0].arn
-  port              = "443"
+  port              = var.lb_app_port
   protocol          = "TLS"
   ssl_policy        = var.ssl_policy
   certificate_arn   = var.certificate_arn
@@ -180,7 +180,7 @@ resource "aws_lb_listener" "frontend_HTTPS_listener" {
 resource "aws_lb_listener" "backend_HTTP_listener" {
   count             = var.lb_needed && var.lb_type != "public" ? 1:0
   load_balancer_arn = aws_lb.lb[0].arn
-  port              = var.app_port
+  port              = var.lb_app_port
   protocol          = "HTTP"
   default_action {
     type             = "forward"
