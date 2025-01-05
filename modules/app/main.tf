@@ -16,55 +16,55 @@ resource "aws_instance" "instance" {
   }
 }
 # create a security group
-# resource "aws_security_group" "security_group" {
-#   name        = "${var.env}-sg"
-#   vpc_id      = var.vpc_id
-#   ingress {
-#     from_port        = var.app_port
-#     to_port          = var.app_port
-#     protocol         = "TCP"
-#     cidr_blocks      = var.server_app_port
-#
-#   }
-#   ingress {
-#     from_port        = 22
-#     to_port          = 22
-#     protocol         = "TCP"
-#     cidr_blocks      = var.bastion_nodes
-#   }
-#   egress {
-#     from_port        = 0
-#     to_port          = 0
-#     protocol         = "-1"
-#     cidr_blocks      = ["0.0.0.0/0"]
-#
-#   }
-#   tags = {
-#     Name = "${var.env}-sg"
-#   }
-# }
-
 resource "aws_security_group" "security_group" {
-    name        = "${var.env}-sg"
-    vpc_id      = var.vpc_id
-    ingress {
-      from_port        = 0
-      to_port          = 0
-      protocol         = "-1"
-      cidr_blocks      = ["0.0.0.0/0"]
+  name              = "${var.env}-sg"
+  vpc_id            = var.vpc_id
+  ingress {
+    from_port        = var.app_port
+    to_port          = var.app_port
+    protocol         = "TCP"
+    cidr_blocks      = var.server_app_port
 
-    }
+  }
+  ingress {
+    from_port        = 22
+    to_port          = 22
+    protocol         = "TCP"
+    cidr_blocks      = var.bastion_nodes
+  }
   egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
 
-    }
-    tags = {
-      Name = "${var.env}-sg"
-    }
   }
+  tags = {
+    Name = "${var.env}-sg"
+  }
+}
+# to allow traffic to  any port
+# resource "aws_security_group" "security_group" {
+#     name        = "${var.env}-sg"
+#     vpc_id      = var.vpc_id
+#     ingress {
+#       from_port        = 0
+#       to_port          = 0
+#       protocol         = "-1"
+#       cidr_blocks      = ["0.0.0.0/0"]
+#
+#     }
+#   egress {
+#     from_port        = 0
+#     to_port          = 0
+#     protocol         = "-1"
+#     cidr_blocks      = ["0.0.0.0/0"]
+#
+#     }
+#     tags = {
+#       Name = "${var.env}-sg"
+#     }
+#   }
 # create a provisioner
 resource "null_resource" "null_instance" {
   connection {
@@ -104,7 +104,7 @@ resource "aws_lb" "lb" {
   name               = "${var.env}-${var.component}-lb"
   internal           = var.lb_type == "public" ? false : true
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.security_group.id]
+  security_groups    = [aws_security_group.lb_security_group[0].id]
   subnets            = var.lb_subnets
   tags = {
     Environment = "${var.env}-${var.component}-lb"
@@ -147,25 +147,25 @@ resource "aws_lb_listener" "lb_listener" {
   }
 }
 # create a security loadbalancer
-# resource "aws_security_group" "lb_security_group" {
-#   count              = var.lb_needed ? 1:0
-#   name               = "${var.env}-lsg"
-#   vpc_id             = var.vpc_id
-#   ingress {
-#     from_port        = var.app_port
-#     to_port          = var.app_port
-#     protocol         = "TCP"
-#     cidr_blocks      = var.lb_app_port
-#   }
-#   egress {
-#     from_port        = 0
-#     to_port          = 0
-#     protocol         = "-1"
-#     cidr_blocks      = ["0.0.0.0/0"]
-#   }
-#   tags = {
-#     Name = "${var.env}-lsg"
-#   }
-# }
+resource "aws_security_group" "lb_security_group" {
+  count              = var.lb_needed ? 1:0
+  name               = "${var.env}-lsg"
+  vpc_id             = var.vpc_id
+  ingress {
+    from_port        = var.app_port
+    to_port          = var.app_port
+    protocol         = "TCP"
+    cidr_blocks      = var.lb_app_port
+  }
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "${var.env}-lsg"
+  }
+}
 
 
