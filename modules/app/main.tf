@@ -151,7 +151,7 @@ resource "aws_lb_target_group_attachment" "tg_attach" {
 resource "aws_lb_listener" "frontend_HTTP" {
   count             = var.lb_needed && var.lb_type == "public" ? 1:0
   load_balancer_arn = aws_lb.lb[0].arn
-  port              = 80
+  port              = var.app_port
   protocol          = "HTTP"
   default_action {
     type = "redirect"
