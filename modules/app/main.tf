@@ -84,7 +84,7 @@ resource "null_resource" "null_instance" {
 }
 resource "aws_route53_record" "server_record" {
 #   count = var.lb_needed ? 0 : 1
-  name      = "${var.env}-${var.component}"
+  name      = "${var.component}-${var.env}"
   type      = "A"
   zone_id   = var.zone_id
   ttl       = 5
