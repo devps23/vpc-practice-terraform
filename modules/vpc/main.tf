@@ -88,7 +88,7 @@ resource "aws_route_table" "frontend_route_table" {
     nat_gateway_id = aws_nat_gateway.nat[count.index].id
   }
   tags = {
-    Name = "${var.env}-route-table-${count.index+1}"
+    Name = "${var.env}-frontend-route-table-${count.index+1}"
   }
 }
 # create backend route table
@@ -100,7 +100,7 @@ resource "aws_route_table" "backend_route_table" {
     nat_gateway_id = aws_nat_gateway.nat[count.index].id
   }
   tags = {
-    Name = "${var.env}-route-table-${count.index+1}"
+    Name = "${var.env}-backend-route-table-${count.index+1}"
   }
 }
 # associate route table id to subnet id
@@ -141,4 +141,5 @@ resource "aws_route" "default_route" {
   destination_cidr_block = var.frontend_subnets[count.index]
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
 }
+
 
