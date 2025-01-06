@@ -37,7 +37,7 @@ module "frontend"{
   server_app_port = var.public_subnets
   bastion_nodes = var.bastion_nodes
   lb_cidr_block = ["0.0.0.0/0"]
-  certificate_arn = "arn:aws:acm:us-east-1:041445559784:certificate/72a58e17-a0dd-4c57-be2e-9c2caf20a5ec"
+  certificate_arn = "arn:aws:acm:us-east-1:041445559784:certificate/dcb80f13-164d-4a44-bd25-95751bdeef59"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-1-2021-06"
   lb_app_port = {HTTP:80,HTTPS:443}
 }
