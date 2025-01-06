@@ -20,7 +20,7 @@ module "vpc" {
 #   vpc_id    = module.vpc.vpc_id
 # }
 module "frontend"{
-#   depends_on = [module.backend]
+  depends_on = [module.backend]
   source = "./modules/app"
   env    = var.env
   instance_type = var.instance_type
