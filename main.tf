@@ -49,16 +49,21 @@ module "backend"{
   subnet_id = module.vpc.backend_subnets
   vpc_id = module.vpc.vpc_id
   component = "backend"
-  lb_type = "private"
+#   lb_type = "private"
   zone_id = var.zone_id
-  lb_subnets = module.vpc.backend_subnets
-  lb_needed = true
-  app_port = 8080
-  vault_token=var.vault_token
-  server_app_port = concat(var.frontend_subnets,var.backend_subnets)
-  bastion_nodes = var.bastion_nodes
-  lb_cidr_block = var.frontend_subnets
-  lb_app_port = {HTTP:8080}
+#   lb_subnets = module.vpc.backend_subnets
+#   lb_needed = true
+#   app_port = 8080
+#   vault_token=var.vault_token
+#   server_app_port = concat(var.frontend_subnets,var.backend_subnets)
+#   bastion_nodes = var.bastion_nodes
+#   lb_cidr_block = var.frontend_subnets
+
+  app_port        = ""
+  bastion_nodes   = ""
+  lb_subnets      = ""
+  server_app_port = ""
+  vault_token     = var.vault_token
 }
 # module "mysql"{
 #   source = "./modules/app"
