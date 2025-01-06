@@ -143,7 +143,8 @@ resource "aws_route" "default_route" {
 }
 
 resource "aws_route" "public_route"{
-  route_table_id = aws_route_table.public_route_table.id
+  count = length(var.public_subnets)
+  route_table_id = aws_route_table.public_route_table[count.index].id
   destination_cidr_block = var.default_route_table_id
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
 }
