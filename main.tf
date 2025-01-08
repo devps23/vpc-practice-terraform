@@ -44,7 +44,7 @@ module "frontend"{
 #   lb_app_port = {HTTP:80,HTTPS:443}
 }
 module "backend"{
-  depends_on = [module.mysql]
+#   depends_on = [module.mysql]
   source = "./modules/app"
   env    = var.env
   instance_type = var.instance_type
