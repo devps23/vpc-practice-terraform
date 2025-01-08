@@ -76,7 +76,7 @@ module "mysql"{
   component = "mysql"
   zone_id = var.zone_id
 #   lb_subnets = module.vpc.backend_subnets
-  app_port = 3306
+#   app_port = 3306
   vault_token=var.vault_token
 #   server_app_port = var.backend_subnets
 #   bastion_nodes = var.bastion_nodes
