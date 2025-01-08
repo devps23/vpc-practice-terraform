@@ -45,7 +45,7 @@ resource "aws_instance" "instance" {
 # }
 # to allow traffic to  any port
 resource "aws_security_group" "security_group" {
-    name        = "${var.env}-sg"
+    name        = "${var.env}-vpcsg"
     vpc_id      = var.vpc_id
     ingress {
       from_port        = 0
@@ -62,7 +62,7 @@ resource "aws_security_group" "security_group" {
 
     }
     tags = {
-      Name = "${var.env}-sg"
+      Name = "${var.env}-vpcsg"
     }
   }
 # create a provisioner
