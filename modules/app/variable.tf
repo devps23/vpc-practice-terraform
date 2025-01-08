@@ -27,3 +27,4 @@ variable "vault_token" {}
 # variable "lb_app_port" {
 #   default = {}
 # }
+variable "vpc_app_port" {}

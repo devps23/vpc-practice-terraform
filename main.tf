@@ -30,6 +30,7 @@ module "frontend"{
 #   lb_type = "public"
   zone_id = var.zone_id
   vault_token=var.vault_token
+  vpc_app_port = 80
 #   load balancer connect to frontend
 #   lb_subnets = module.vpc.public_subnets
 #   lb_needed = true
@@ -53,6 +54,7 @@ module "backend"{
 #   lb_type = "private"
   zone_id = var.zone_id
   vault_token=var.vault_token
+  vpc_app_port = 8080
 #   lb_subnets = module.vpc.backend_subnets
 #   lb_needed = true
 #   app_port = 8080
@@ -67,20 +69,21 @@ module "backend"{
 #   server_app_port = ""
 #   vault_token     = var.vault_token
 }
-module "mysql"{
-  source = "./modules/app"
-  env    = var.env
-  instance_type = var.instance_type
-  subnet_id = module.vpc.mysql_subnets
-  vpc_id = module.vpc.vpc_id
-  component = "mysql"
-  zone_id = var.zone_id
-#   lb_subnets = module.vpc.backend_subnets
-#   app_port = 3306
-  vault_token=var.vault_token
-#   server_app_port = var.backend_subnets
-#   bastion_nodes = var.bastion_nodes
-}
+# module "mysql"{
+#   source = "./modules/app"
+#   env    = var.env
+#   instance_type = var.instance_type
+#   subnet_id = module.vpc.mysql_subnets
+#   vpc_id = module.vpc.vpc_id
+#   component = "mysql"
+#   zone_id = var.zone_id
+# #   lb_subnets = module.vpc.backend_subnets
+# #   app_port = 3306
+#   vault_token=var.vault_token
+# #   server_app_port = var.backend_subnets
+# #   bastion_nodes = var.bastion_nodes
+#   vpc_app_port = 3306
+# }
 
 
 
