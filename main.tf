@@ -71,7 +71,7 @@ module "mysql"{
   source = "./modules/app"
   env    = var.env
   instance_type = var.instance_type
-  subnet_id = "module.vpc."
+  subnet_id = module.vpc.mysql_subnets
   vpc_id = module.vpc.vpc_id
   component = "mysql"
   zone_id = var.zone_id
