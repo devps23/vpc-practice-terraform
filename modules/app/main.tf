@@ -3,7 +3,7 @@ resource "aws_instance" "instance" {
   ami = data.aws_ami.ami.image_id
   instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.security_group.id]
-  subnet_id = var.subnet_id[0]
+#   subnet_id = var.subnet_id[0]
   instance_market_options {
     market_type = "spot"
     spot_options {
@@ -46,7 +46,7 @@ resource "aws_instance" "instance" {
 # to allow traffic to  any port
 resource "aws_security_group" "security_group" {
     name        = "${var.env}-vpcsg"
-    vpc_id      = var.vpc_id
+#     vpc_id      = var.vpc_id
     ingress {
       from_port        = var.vpc_app_port
       to_port          = var.vpc_app_port
