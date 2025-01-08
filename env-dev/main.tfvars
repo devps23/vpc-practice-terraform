@@ -11,7 +11,7 @@ db_subnets=["10.10.128.0/19","10.10.160.0/19"]
 public_subnets=["10.10.192.0/19","10.10.224.0/19"]
 zone_id = "Z09583601MY3QCL7AJKBT"
 vault_token="hvs.fMGVYmkvteLqprw3itd1iXUe"
-bastion_nodes=["172.31.84.158/32"]
+# bastion_nodes=["172.31.84.158/32"]
 availability_zones=["us-east-1a", "us-east-1b"]
 
 
