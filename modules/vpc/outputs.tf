@@ -10,3 +10,6 @@ output "public_subnets"{
 output "backend_subnets"{
   value = aws_subnet.backend_subnets.*.id
 }
+output "mysql_subnets"{
+  value = aws_subnet.mysql_subnets.*.id
+}
