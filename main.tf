@@ -43,6 +43,8 @@ module "frontend"{
 #   certificate_arn = "arn:aws:acm:us-east-1:041445559784:certificate/dcb80f13-164d-4a44-bd25-95751bdeef59"
 # #   ssl_policy        = "ELBSecurityPolicy-TLS13-1-1-2021-06"
 #   lb_app_port = {HTTP:80,HTTPS:443}
+  subnet_id = module.vpc.frontend_subnets
+  vpc_id    = module.vpc.vpc_id
 }
 # module "backend"{
 #   depends_on = [module.mysql]
