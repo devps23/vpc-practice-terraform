@@ -49,9 +49,9 @@ resource "aws_subnet" "backend_subnets" {
 }
 # create mysql subnets
 resource "aws_subnet" "mysql_subnets" {
-  count        = length(var.db_subnets)
+  count        = length(var.mysql_subnets)
   vpc_id       = aws_vpc.vpc.id
-  cidr_block   = var.db_subnets[count.index]
+  cidr_block   = var.mysql_subnets[count.index]
   availability_zone = var.availability_zones[count.index]
 
   tags = {
@@ -105,7 +105,7 @@ resource "aws_route_table" "backend_route_table" {
 }
 # create db route table
 resource "aws_route_table" "mysql_route_table" {
-  count = length(var.db_subnets)
+  count = length(var.mysql_subnets)
   vpc_id = aws_vpc.vpc.id
   route {
     cidr_block = "0.0.0.0/0"
@@ -152,7 +152,7 @@ resource "aws_route_table_association" "backend-route-association" {
 }
 # //associate route table to backend subnet id
 resource "aws_route_table_association" "mysql-route-association" {
- count = length(var.db_subnets)
+ count = length(var.mysql_subnets)
  subnet_id      = aws_subnet.mysql_subnets[count.index].id
  route_table_id = aws_route_table.mysql_route_table[count.index].id
 }
@@ -181,7 +181,7 @@ resource "aws_route" "backend_route" {
 }
 # edit mysql route
 resource "aws_route" "mysql_route" {
-  count = length(var.db_subnets)
+  count = length(var.mysql_subnets)
   route_table_id = aws_route_table.mysql_route_table[count.index].id
   destination_cidr_block = var.default_vpc_cidr_block
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
