@@ -7,10 +7,11 @@ module "vpc" {
   default_vpc_cidr_block = var.default_vpc_cidr_block
   default_route_table_id = var.default_route_table_id
   backend_subnets = var.backend_subnets
-  db_subnets = var.mysql_subnets
+  mysql_subnets = var.mysql_subnets
   frontend_subnets = var.frontend_subnets
   public_subnets = var.public_subnets
  availability_zones = var.availability_zones
+
 }
 # module "app"{
 #   source = "./modules/app"
