@@ -27,7 +27,7 @@ module "frontend"{
   subnet_id = module.vpc.frontend_subnets
   vpc_id = module.vpc.vpc_id
   component = "frontend"
-  lb_type = "public"
+#   lb_type = "public"
   zone_id = var.zone_id
   vault_token=var.vault_token
 #   load balancer connect to frontend
@@ -75,10 +75,10 @@ module "mysql"{
   vpc_id = module.vpc.vpc_id
   component = "mysql"
   zone_id = var.zone_id
-  lb_subnets = module.vpc.backend_subnets
+#   lb_subnets = module.vpc.backend_subnets
   app_port = 3306
   vault_token=var.vault_token
-  server_app_port = var.backend_subnets
+#   server_app_port = var.backend_subnets
 #   bastion_nodes = var.bastion_nodes
 }
 
